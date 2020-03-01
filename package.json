@@ -37,7 +37,7 @@
     "asparts.core.app": "~0.0.1",
     "asparts.core.websocket.service": "~0.0.1",
     "asparts.static": "^0.2.44",
-    "bower": "~1.5.2",
+    "bower": "~1.8.8",
     "dotenv": "^8.2.0",
     "eslint-config-asparts": "~1.0.0",
     "grunt": "~0.4.5",
