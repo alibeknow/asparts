@@ -1,0 +1,16 @@
+include /common/widgets
+//- h4.page-header Контактные данные:
+.row
+  .container-fluid
+    +form({id:'admin_user_contact_edit', action:'/admin/user/contacts/save', validate: 1, method: 'post', callback:'showUserInfo', 'X-content-container': '#user_contacts'})
+      input(type='hidden' name='user_id' value=contacts.id)
+      +field({name:'phone', label: 'Мобильный телефон', value: contacts.phone, placeholder:'+7(___)___-__-__'})
+      +field({name:'email', label: 'Email', value: contacts.email})
+      +field({name:'icq', label: 'ICQ', value: contacts.icq})
+      +field({name:'phone_int', label: 'Внутренний телефон', value: contacts.phone_int})
+      +field({name:'chat2desk', label: 'ID Chat2desk', value: contacts.chat2desk})
+      script _do(function ($) {$('#phone').mask('+7(999)999-99-99');});
+      .form-group.panel-footer
+        a.btn.btn-default.content-link(href='/admin/user/contacts/#{contacts.id}/view' 'X-content-container' ='#user_contacts')
+          |&nbsp;Отменить
+        +submit({label: 'Сохранить'})

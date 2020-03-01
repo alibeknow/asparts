@@ -1,0 +1,11 @@
+include /common/widgets
+//- h4.page-header Скидка:
+.row
+  .container-fluid
+    +form({id:'admin_user_discount_edit', action:'/admin/user/discount/save', validate: 1, method: 'post', 'X-content-container': '#user_discount'})
+      input(type='hidden' name='user_id' value=discount.user_id)
+      +select({name: 'discount_id', label: 'Скидка', values: discounts, selected_id: discount.discount_id, id_field: 'id', display_field: 'name'})
+      .form-group.panel-footer
+        a.btn.btn-default.content-link(href='/admin/user/discount/#{discount.user_id}/view' 'X-content-container' ='#user_discount')
+          |&nbsp;Отменить
+        +submit({label: 'Сохранить'})

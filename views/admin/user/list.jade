@@ -1,0 +1,20 @@
+extends /layout/full
+block content
+  .main
+    h3.page-header Список пользователей
+    .table-responsive
+      table.table.table-striped.table-bordered.table__DataTable(cellspacing="0" width="100%")
+        thead
+            th.active
+              | ФИО
+            th
+              | Телефон
+            th
+              | Почта
+            th
+              | Уровень скидки
+            th
+              | Тип пользователя
+            th
+        tbody
+  script _do(function ($) {require(['/admin/js/users.js'], function (init_table) {init_table()});});

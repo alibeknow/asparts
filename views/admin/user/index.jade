@@ -1,0 +1,312 @@
+include /common/widgets
+
+mixin phone_url(phone, phone_text)
+  if (is_mobile)
+    a(href="tel:#{phone}" title="#{phone_text}") #{phone_text}
+  else
+    |#{phone_text}
+
+mixin order_info_descr(order)
+  | #{order.delivery_type}
+  if (order.user_address)
+    br
+    | #{order.user_address}
+  if (order.comment)
+    br
+    |Комментарий:&nbsp;
+    strong #{order.comment}
+
+
+mixin order_manager_descr(order)
+  if (order.manager_fio)
+    a.content-link(href='/contacts/#{order.manager_id}')
+      | #{order.manager_fio}
+    br
+    if (order.manager_email)
+      nobr email:&nbsp;
+        a(href="mailto:#{order.manager_email}") #{order.manager_email}
+    if (order.manager_phone_str)
+      br
+      nobr тел:&nbsp;
+      +phone_url(order.manager_phone_str, order.manager_phone_str)
+  else
+    | Менеджер не назначен
+
+mixin order_list(orders)
+  .container-fluid
+    .row
+      .table-responsive
+        table.table.table-hover.table-condensed
+          thead
+            tr.active
+              th.user-order-thead-th №
+              th.user-order-thead-th Заказ №
+              th.user-order-thead-th-center Дата
+              th.user-order-thead-th Клиент
+              th.user-order-thead-th Менеджер
+              th.user-order-thead-th Сумма
+              th.user-order-thead-th Статус
+          tbody
+            - var cnt = 0;
+            each order in orders
+              - cnt++;
+              tr.content-link(data-row-key="#{order.id}" href="#{'/order/' + order.id}")
+                td.user-order-tbody-th-center #{cnt}
+                td.user-order-tbody-th-center #{order.id}
+                td.user-order-tbody-th-center #{order.create_date}
+                td.user-order-tbody-th
+                  if (order.client_type_unicode !=='ph')
+                    |#{order.le_short_name}
+                  else
+                    |#{order.fio}
+                  br
+                  +order_info_descr(order)
+                td.user-order-tbody-th
+                  +order_manager_descr(order)
+                td.user-order-tbody-th
+                  |#{order.summ}
+                td.user-order-tbody-th
+                  |#{order.status_name || 'Создан'}
+                  if (order.status_detail)
+                    br
+                    | #{order.status_detail}
+
+                  if (order.need2payMax)
+                    if (order.need2payMax !== 0)
+                      -var price_difference = order.summ - order.need2payMax;
+                      -var need2payClass = 'text-danger';
+                      if (price_difference == order.summ)
+                        -need2payClass = 'text-success'
+                      br
+                      span(class=need2payClass)
+                        | Оплачено #{price_difference} из #{order.summ}
+
+mixin user_roles(user)
+  if (user && user.roles)
+    .panel.panel-default
+      .panel-heading
+        | Роли:
+      .panel-body
+        +form({id:"save_roles", action:'/admin/user/save_roles',validate: 1, callback: 'showDeliveryTypes'})
+          .form-group
+            .container-fluid
+              .col-md-11.col-md-offset-1
+                input(type="hidden" name="user_id" value=user.id)
+                -
+                each role in user.role_list
+                  .checkbox(title="#{role.role}")
+                    if (role.is_active)
+                      input(id="#{role.role}" name="#{role.role}" type="checkbox" checked)
+                    else
+                      input(id="#{role.role}" name="#{role.role}" type="checkbox")
+                    |#{role.title}
+          .form-group.panel-footer
+            +submit({label: 'Сохранить изменения'})
+
+mixin user_discount(user)
+  if (user && user.roles)
+    +form({id:"user_discount", action:'/admin/user/save_discount',validate: 1})
+      h4.page-header Роли:
+      .form-group
+        .row
+          .container-fluid
+            .col-md-11.col-md-offset-1
+              input(type="hidden" name="user_id" value=user.id)
+              each role in user.roles
+                .checkbox
+                  if (role.is_active)
+                    input(id="#{role.role}" name="#{role.role}" type="checkbox" checked)
+                  else
+                    input(id="#{role.role}" name="#{role.role}" type="checkbox")
+                  |#{role.title}
+        .form-group.panel-footer
+          +submit({label: 'Сохранить изменения'})
+
+mixin manager_delivery_types(user)
+  if (user && user.delivery_types)
+    #save_delivery_types_div
+      .panel.panel-default
+        .panel-heading
+          | Виды доставки (только для менеджеров):
+        .panel-body
+          +form({id:"save_delivery_types", action:'/admin/user/save_delivery_types'})
+            .form-group
+              .container-fluid
+                .col-md-11.col-md-offset-1
+                  input(type="hidden" name="user_id" value=user.id)
+                  each dtypes in user.delivery_types
+                    div.checkbox
+                      if (dtypes.is_active)
+                        input(name="#{dtypes.delivery_type_unicode}" type="checkbox" checked)
+                      else
+                        input(name="#{dtypes.delivery_type_unicode}" type="checkbox" )
+                      | #{dtypes.delivery_types_name}
+            .form-group.panel-footer
+              +submit({label: 'Сохранить изменения'})
+
+mixin manager_groups(user)
+  if (user && user.manager_groups)
+    #save_groups_div
+      .panel.panel-default
+        .panel-heading
+          | Группы (только для менеджеров):
+        .panel-body
+          +form({id:"save_delivery_types", action:'/admin/user/save_manager_group'})
+            .form-group
+              .container-fluid
+                .col-md-11.col-md-offset-1
+                  input(type="hidden" name="user_id" value=user.id)
+                  each group in user.manager_groups
+                    div.checkbox
+                      if (group.is_active)
+                        input(name="#{group.id}" type="checkbox" checked)
+                      else
+                        input(name="#{group.id}" type="checkbox" )
+                      | #{group.value}
+            .form-group.panel-footer
+              +submit({label: 'Сохранить изменения'})
+
+mixin manager_widget_queue_types(user)
+  if (user && user.widget_access)
+    #save_widget_access
+      .panel.panel-default
+        .panel-heading
+          | Доступ к очередям (только для менеджеров):
+        .panel-body
+          +form({id:"save_widget_access", action:'/admin/user/save_widget_access'})
+            .form-group
+              .container-fluid
+                .col-md-11.col-md-offset-1
+                  input(type="hidden" name="user_id" value=user.id)
+                  each widget in user.widget_access
+                    div.checkbox
+                      if (widget.is_active)
+                        input(name="#{widget.prefix}" type="checkbox" checked)
+                      else
+                        input(name="#{widget.prefix}" type="checkbox")
+                      | #{widget.title}
+            .form-group.panel-footer
+              +submit({label: 'Сохранить изменения'})
+
+mixin manager_to_dep(user)
+  if (user && user.user_deps)
+    #save_widget_access
+      .panel.panel-default
+        .panel-heading
+          | Отдел (только для менеджеров):
+        .panel-body
+          +form({id:"save_user_deps", action:'/admin/user/save_user_deps'})
+            .form-group
+              .container-fluid
+                .col-md-11.col-md-offset-1
+                  input(type="hidden" name="user_id" value=user.id)
+                  each dep in user.user_deps
+                    div.checkbox
+                      if (dep.is_active)
+                        input(name="#{dep.id}" type="checkbox" checked)
+                      else
+                        input(name="#{dep.id}" type="checkbox")
+                      | #{dep.name}
+            .form-group.panel-footer
+              +submit({label: 'Сохранить изменения'})
+
+mixin manager_to_template(user)
+  if (user && user.user_template)
+    #save_widget_access
+      .panel.panel-default
+        .panel-heading
+          | Доступ к sms-шаблонам (только для менеджеров):
+        .panel-body
+          +form({id:"save_user_template", action:'/admin/user/save_user_template'})
+            .form-group
+              .container-fluid
+                .col-md-11.col-md-offset-1
+                  input(type="hidden" name="user_id" value=user.id)
+                  each template in user.user_template
+                    div.checkbox
+                      if (template.is_active)
+                        input(name="#{template.id}" type="checkbox" checked)
+                      else
+                        input(name="#{template.id}" type="checkbox")
+                      | #{template.name}
+            .form-group.panel-footer
+              +submit({label: 'Сохранить изменения'})
+
+mixin manager_to_discount(user)
+  if (user && user.user_discount)
+    #save_widget_access
+      .panel.panel-default
+        .panel-heading
+          | Доступ к скидкам (только для менеджеров):
+        .panel-body
+          +form({id:"save_user_discount", action:'/admin/user/save_user_discount'})
+            .form-group
+              .container-fluid
+                .col-md-11.col-md-offset-1
+                  input(type="hidden" name="user_id" value=user.id)
+                  each discount in user.user_discount
+                    div.checkbox
+                      if (discount.is_active)
+                        input(name="#{discount.id}" type="checkbox" checked)
+                      else
+                        input(name="#{discount.id}" type="checkbox")
+                      | #{discount.name}
+            .form-group.panel-footer
+              +submit({label: 'Сохранить изменения'})
+
+
+extends /layout/full
+block content
+  .main
+    h1.page-header(style="margin: 5px 0 10px;font-size: 20px;") Информация о пользователе
+    .row
+      .col-md-6
+        .panel.panel-default
+          .panel-heading
+            | Контактные данные
+          .panel-body
+            .container-fluid
+              .row
+                #user_contacts
+                  include /admin/user/contacts/view
+      if (discount)
+        .col-md-6
+          .panel.panel-default
+            .panel-heading
+              | Скидка
+            .panel-body
+              .container-fluid
+                .row
+                  #user_discount
+                    include /admin/user/discount/view
+      .col-md-12
+        .panel.panel-default
+          .panel-heading
+            | Данные за период
+          .panel-body
+            .container-fluid
+              .row
+                include /admin/user/filters
+      if (orders)
+        include /admin/user/user_orders
+      if (busines_card)
+        include /admin/user/busines_card
+      if (call_data)
+        include /admin/user/call_data
+
+      if (user && user.roles && (user.roles.admin || user.roles.major_manager))
+        .col-md-6.col-xs-12
+          +user_roles(data)
+        .col-md-6.col-xs-12
+          +manager_delivery_types(data)
+        .col-md-6.col-xs-12
+          +manager_widget_queue_types(data)
+        .col-md-6.col-xs-12
+          +manager_to_dep(data)
+        .col-md-6.col-xs-12
+          +manager_to_template(data)
+        .col-md-6.col-xs-12
+          +manager_to_discount(data)
+        .col-md-6.col-xs-12
+          +manager_groups(data)
+          script _do(function ($) {showDeliveryTypes();});

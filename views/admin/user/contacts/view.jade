@@ -1,0 +1,48 @@
+//- h4.page-header Контактные данные:
+if (data)
+  .row
+    .container-fluid
+      .col-md-12
+          //- strong Логин:
+          //- .pull-right &nbsp; #{data.login}
+          //- br
+          if (data && data.client_type_unicode !== 'ph')
+            strong Организация:
+            .pull-right &nbsp; #{data.le_short_name}
+            br
+            strong Контактное лицо:
+            .pull-right &nbsp; #{data.fio}
+            br
+            strong E-mail:
+            .pull-right &nbsp; #{data.email}
+            br
+            strong Телефон:
+            .pull-right &nbsp; #{data.phone}
+            br
+            strong Адрес:
+            .pull-right &nbsp; #{data.le_fact_address}
+            br
+          else
+            strong Ф.И.О.:
+            .pull-right &nbsp; #{data.fio}
+            br
+            strong Телефон:
+            .pull-right &nbsp; #{data.phone}
+            br
+            strong E-mail:
+            .pull-right &nbsp; #{data.email}
+            br
+            if (data && data.roles && data.roles.manager)
+              strong Внутренний телефон:
+              .pull-right &nbsp; #{data.phone_int}
+              br
+              strong ICQ:
+              .pull-right &nbsp; #{data.icq}
+              br
+              strong chat2desk:
+              .pull-right &nbsp; #{data.chat2desk}
+              br
+      if (data && data.id &&user && user.roles && (user.roles.admin || user.roles.major_manager || user.roles.can_see_users))
+        a.btn.btn-info.content-link.pull-right(href='/admin/user/contacts/#{data.id}/edit' 'x-content-container'="#user_contacts")
+          i.fa.fa-edit
+          |&nbsp; Редактировать

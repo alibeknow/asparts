@@ -1,0 +1,24 @@
+extends /layout/full
+block content
+  .main
+    if (user && user.roles && user.roles.admin)
+    a.btn.btn-default(href="/admin/view-roles" target="_blank")
+      | Сводная информация по ролям
+    h3.page-header
+      | Список менеджеров
+    .table-responsive
+      table.table.table-striped.table-bordered.table__DataTable(cellspacing="0" width="100%")
+          thead
+            tr.active
+              th
+                | ФИО
+              th
+                | Внутрений номер
+              th
+                | Сотовый телефон
+              th
+                | Почта
+              th
+                | ICQ
+          tbody
+      script _do(function ($) {require(['/admin/js/manager.js'], function (init) {init()});});

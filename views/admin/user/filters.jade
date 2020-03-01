@@ -1,0 +1,20 @@
++form({id:"user_form_filters", action: report_content, method:"GET"})
+  .row
+    if (showPeriodSelect)
+      .col-xs-12.col-sm-6.col-md-6.col-lg-6
+        +date({label: 'С даты', name: 'startDate', value: startDate})
+      .col-xs-12.col-sm-6.col-md-6.col-lg-6
+        +date({label: 'По дату', name: 'endDate', value: endDate})
+    if (showStatusSelect)
+      .col-xs-12.col-sm-8.col-md-6.col-lg-6
+        +select({label: 'Статус заказов', name: 'status', values: select_statuses, selected_id: status, class: 'report-filter-input', placeholder:'Все', id_field: 'unicode', display_field: 'label_mng_past'})
+    if (showPeriod)
+      - var periods = [{id: 1, name: 'Сегодня'}, {id: 7, name: 'Неделя'}, {id: 31, name: 'Месяц'}, {id: 365, name: 'Год'}];
+      +radio({label: 'Период', name: 'period', values: periods, value: period, class: 'report-filter-input'})
+    if (showStatus)
+      - var statuses = [{id: 'all', name: 'Все'}, {id: 'create', name: 'Создан'}, {id: "assigned", name: 'Назначен'}, {id: "verified", name: 'Проверен'}, {id: "paid", name: 'Оплачен'}, {id: "formed", name: 'Сформирован'}, {id: "received", name: 'Выдан'}, {id: "finished", name: "Завершен"}, {id: "cancel", name: "Отменен"}];
+      +radio({label: 'Статус', name: 'status', values: statuses, value: status, class: 'report-filter-input'})
+
+  .form-group.panel-footer
+    .col-sm-12.col-md-9.col-md-offset-3
+      +submit({label:"Обновить", class: "btn-default", icon: 'fa fa-refresh'})  .col-lg-6

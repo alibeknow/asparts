@@ -1,0 +1,21 @@
+if (orders)
+  .col-md-12
+    .panel.panel-default
+      .panel-heading
+        | Заказы пользователя
+      .panel-body
+        .container-fluid
+          .row
+            if (orders.orders && orders.orders.length > 0)
+              if (showPeriod)
+                h4 Данные за период #{startDate} -- #{endDate} (Заказов: #{orders.orders.length})
+              else 
+                h4 Заказов: #{orders.orders.length}
+              +order_list(orders.orders)
+            else if (startDate && endDate)
+              if (orders.emptyMsg)
+                .text-center
+                  .alert.alert-warning #{orders.emptyMsg}
+              else
+                .text-center
+                  .alert.alert-warning Данные за период #{startDate} -- #{endDate} отсутствуют

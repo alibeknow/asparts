@@ -1,0 +1,9 @@
+a.dropdown-toggle.btn-info.inline-block.hidden-xs.pull-left(data-toggle='dropdown' href='#')
+  span#cur_discount_name.hidden-sm &nbsp;#{as_discount[0].cur_discount || 'нет %'}&nbsp;
+  b.caret
+ul.dropdown-menu.hidden-xs
+  each item in as_discount
+    if (user && user.roles && user.roles.manager)
+      li
+        a.content-link(href="/admin/switch_tariff" method="post" data="#{JSON.stringify({discount_id: item.id, discount_name: item.name})}")
+          | #{item.name}

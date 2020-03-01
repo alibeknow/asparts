@@ -1,0 +1,8 @@
+{
+  "name": "asparts.admin",
+  "version": "0.0.1",
+  "dependencies": {
+    "datatables.net": "1.10.15",
+    "datatables.net-dt": "3.2.2"
+  }
+}

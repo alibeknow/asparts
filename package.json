@@ -1,0 +1,50 @@
+{
+  "name": "asparts.admin",
+  "version": "0.0.74",
+  "private": false,
+  "main": "index.js",
+  "scripts": {
+    "start": "node -r dotenv/config start",
+    "dev": "nodemon -r dotenv/config start",
+    "prepublish": "bower install && grunt build"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "dependencies": {
+    "@asparts/auth.fetcher": "^0.1.0",
+    "asparts.auth.fetcher": "~0.0.1",
+    "asparts.core.async": "~0.0.1",
+    "asparts.core.check": "~0.0.1",
+    "asparts.core.common": "~0.0.1",
+    "asparts.core.db": "~0.0.1",
+    "asparts.core.db_cache": "~0.0.1",
+    "asparts.core.http": "~0.0.14",
+    "asparts.core.jade": "~0.0.1",
+    "asparts.core.log": "~0.0.1",
+    "asparts.core.message.pub_sub": "~0.0.1",
+    "asparts.core.moment": "~0.0.1",
+    "asparts.core.objectPath": "~0.0.1",
+    "asparts.core.router": "~0.0.1",
+    "asparts.core.websocket": "~0.0.1",
+    "asparts.discount": "~0.0.1",
+    "asparts.manager.queue": "~0.0.1",
+    "asparts.order.fetcher": "~0.0.1",
+    "express": "~4.13.3"
+  },
+  "devDependencies": {
+    "asparts.asterisk": "~0.0.1",
+    "asparts.core.app": "~0.0.1",
+    "asparts.core.websocket.service": "~0.0.1",
+    "asparts.static": "^0.2.44",
+    "bower": "~1.5.2",
+    "dotenv": "^8.2.0",
+    "eslint-config-asparts": "~1.0.0",
+    "grunt": "~0.4.5",
+    "grunt-cli": "~0.1.13",
+    "grunt-connect": "~0.2.0",
+    "grunt-contrib-cssmin": "~0.14.0",
+    "grunt-contrib-uglify": "~1.0.1",
+    "grunt-requirejs": "~0.4.2"
+  }
+}

@@ -1,0 +1,37 @@
+extends /layout/full
+block content
+  .container-fluid
+    .main
+      h1.page-header.mt0
+        a.content-link(href="/admin/balance") Баланс по услугам:
+      if (balance)
+        .row
+          .col-sm-4
+            h2
+              a(href="https://smsc.ru/", target="blank") smsc.ru
+            - var balanceSMSC = balance.smsc || 0
+            h1
+              if (balanceSMSC < 1000)
+                span.label.label-danger !
+              | #{balanceSMSC}
+          .col-sm-4
+            h2
+              a(href="https://my.selectel.ru/login/", target="blank") selectel.ru
+            if (balance.selectel)
+              - var balanceSELECTELstorage = balance.selectel.storage || 0
+              - var balanceSELECTELall = balance.selectel.all || 0
+              h1
+                if (balanceSELECTELstorage < 100)
+                  span.label.label-danger !
+                | #{balanceSELECTELstorage}
+              if (balanceSELECTELall > 0)
+                h6 Доступно для перевода: #{balanceSELECTELall}
+            else
+              h1 Error x-token
+          .col-sm-4
+            h2
+              a(href="https://panel.flops.ru/", target="blank") flops.ru
+            h3 API не предоставлен
+            a(href="https://panel.flops.ru/", target="_blank") Проверить самостоятельно ->
+      else
+        p Информация в данный момент не доступна

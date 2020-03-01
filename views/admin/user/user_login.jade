@@ -1,0 +1,23 @@
+include /common/widgets
+extends /layout/full
+block content
+
+  .container-fluid
+    .row
+      h3.page-header Логины пользователя
+      .col-xs-12
+        .row
+          .col-xs-5.text-left Логин
+          .col-xs-5.text-center Новый пароль
+          .col-xs-2
+      hr
+      each login in logins
+        -var url = '/admin/user/' + login.id + '/reset-password';
+        +form({id:`login_form_${login.id}`, validate: 1, action: url, method:"POST"})
+          .col-xs-5.text-left
+            b #{login.login}
+          .col-xs-5
+            +field({name:`pwd`, validate:{p_required: true}, placeholder: 'Новый пароль'})
+          .col-xs-2
+            button.btn.btn-default.btn-sm.pull-right(type="submit")
+              |&nbsp;Сбросить

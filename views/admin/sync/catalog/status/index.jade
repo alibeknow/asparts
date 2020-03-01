@@ -1,0 +1,45 @@
+extends /layout/full
+block content
+  .container-fluid
+    if (imports && imports.length > 0)
+      h1.page-header
+        a.content-link(href="/admin/sync/catalog/status") Список импортов (всего: #{imports.length})
+    else
+      h1.page-header
+        a.content-link(href="/admin/sync/catalog/status") Список импортов
+      h4.page-header импорты отсутвуют
+    .row
+      .container-fluid
+        ul.list-group
+          each imp in imports
+            - var state_class = '';
+            - var state_descr = '';
+            - var state_moment = '';
+            case imp.state
+              when 'finished'
+                - state_class= 'list-group-item-success';
+                - state_descr = 'Завершен';
+                - state_moment = imp.processFinish;
+              when 'create'
+                - state_class= '';
+                - state_descr = 'Создан';
+                - state_moment = imp.created;
+              when 'process'
+                - state_class= 'list-group-item-info';
+                - state_descr = 'В процессе';
+                - state_moment = imp.processStart;
+              when 'skiped'
+                - state_class= 'list-group-item-error';
+                - state_descr = 'пропущен';
+              default
+                - state_class= '';
+
+
+            li.list-group-item(class="#{state_class}")
+              b #{imp.name}&nbsp;
+              b #{state_descr}&nbsp;
+              | #{state_moment}&nbsp;
+              | #{imp.files}&nbsp;
+              if (imp.partCouter > 0)
+                | Загружено #{imp.partCouter} наименований&nbsp;
+//                a.content-link(href="/admin/user/#{user.id}") #{user.fio}

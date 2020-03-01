@@ -1,0 +1,71 @@
+{
+  "replaceConsole": true,
+  "levels": {
+    "[all]" : "info",
+    "server-request": "info",
+    "jade-resolve": "info"
+  },
+  "appenders": [
+    {
+      "layout": {
+        "type": "pattern",
+        "pattern": "[%d][%.1p] %c - %m"
+      },
+      "type": "console"
+    },
+    {
+      "type": "logLevelFilter",
+      "level": "INFO",
+      "appender": {
+        "type": "dateFile",
+        "filename": "log/info.log",
+        "pattern": "-yyyy-MM-dd",
+        "layout": {
+          "type": "pattern",
+          "pattern": "[%d][%.1p] %c - %m"
+        }
+      }
+    },
+    {
+      "layout": {
+        "type": "pattern",
+        "pattern": "[%r][%.1p] %c - %m"
+      },
+      "type": "dateFile",
+      "filename": "log/server_request.log",
+      "pattern": "-yyyy-MM-dd",
+      "category": "server_request"
+    },
+    {
+      "layout": {
+        "type": "pattern",
+        "pattern": "[%r][%.1p] %c - %m"
+      },
+      "type": "dateFile",
+      "filename": "log/bot.log",
+      "pattern": "-yyyy-MM-dd",
+      "category": "bot detector"
+    },
+    {
+      "layout": {
+        "type": "pattern",
+        "pattern": "[%r][%.1p] %c - %m"
+      },
+      "type": "logLevelFilter",
+      "level": "ERROR",
+      "appender": {
+        "type": "file",
+        "filename": "log/errors.log"
+      }
+    },
+    {
+      "type": "logLevelFilter",
+      "level": "WARN",
+      "appender": {
+        "type": "dateFile",
+        "pattern": "-yyyy-MM-dd",
+        "filename": "log/warn.log"
+      }
+    }
+  ]
+}

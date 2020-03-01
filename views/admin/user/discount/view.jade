@@ -1,0 +1,13 @@
+//- h4.page-header Скидка:
+
+.row
+  .container-fluid
+    .col-md-12
+      if (discount.name)
+        .block-center #{discount.name}
+      else
+        .block-center Скидки нет
+    if (user && user.roles && (user.roles.admin || user.roles.major_manager || user.roles.can_see_users))
+      a.btn.btn-info.content-link.pull-right(href='/admin/user/discount/#{discount.user_id}/edit' 'X-content-container'='#user_discount')
+        i.fa.fa-edit
+        |&nbsp; Редактировать

@@ -1,0 +1,14 @@
+.col-md-12
+  .panel.panel-default
+    .panel-heading
+      | Отправленные визитки
+    .panel-body
+      .container-fluid
+        .row
+          .list-group
+            if (busines_card.length == 0)
+              .text-center
+                .alert.alert-warning Данные за период #{startDate} -- #{endDate} отсутствуют
+            each bc in busines_card
+              .list-group-item
+                |#{bc.fio} отправил визитку - #{bc.date}

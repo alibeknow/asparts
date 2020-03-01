@@ -1,0 +1,18 @@
+.col-md-12
+  .panel.panel-default
+    .panel-heading
+      | Звонки пользователя
+    .panel-body
+      .container-fluid
+        .row
+          .list-group
+            if (call_data.length == 0)
+              .text-center
+                .alert.alert-warning Данные за период #{startDate} -- #{endDate} отсутствуют
+            each call in call_data
+              .list-group-item
+                .row
+                  .col-xs-6
+                    label(style="padding: 8px;") #{call.call_date}: Разговаривал с менеджером - #{call.manager}
+                  .col-xs-6
+                    audio(controls preload="none" src="/asterisk/get-call/#{call.call_external_id}")
